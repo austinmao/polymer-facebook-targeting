@@ -1,0 +1,42 @@
+<dom-module id="reach-estimate">
+  <template>
+    <style>
+      :host {
+        display: block;
+        position: relative;
+      }
+    </style>
+    <div>reach estimate</div>
+  </template>
+
+  <script>
+    class ReachEstimate {
+      beforeRegister() {
+        this.is = 'reach-estimate';
+        this.properties = {
+          accessToken: {
+            type: String,
+            value: '',
+            notify: true,
+            reflectToAttribute: true
+          },
+          account: {
+            type: String,
+            value: ''
+          }
+        };
+      }
+      created() {}
+      ready() {
+      }
+      attached() {}
+      detached() {}
+      attributeChanged() {
+        console.log(this.accessToken);
+      }
+    }
+
+    Polymer(ReachEstimate);
+  </script>
+
+</dom-module>

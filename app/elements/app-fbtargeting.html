@@ -1,0 +1,56 @@
+<dom-module id="app-fbtargeting">
+  <template>
+    <style>
+      :host {
+        display: block;
+        position: relative;
+      }
+      paper-tabs {--paper-tabs-selection-bar-color: #cbcbcb;}
+      paper-tab {--paper-tab-ink: #f0f0f0;}
+    </style>
+
+    <paper-material elevation="1">
+      <app-header access-token={{accessToken}} account={{account}}></app-header>
+      <paper-tabs id="tabs" selected="{{selected}}" account={{account}}>
+        <paper-tab>Locations</paper-tab>
+        <paper-tab>Demographics</paper-tab>
+        <paper-tab>Interests</paper-tab>
+      </paper-tabs>
+
+      <iron-pages selected={{selected}}>
+        <div>
+          <add-location access-token={{accessToken}}></add-location>
+        </div>
+        <div>Demographics</div>
+        <div>Interests</div>
+      </iron-pages>
+
+    </paper-material>
+  </template>
+
+  <script>
+    class AppFbTargeting {
+      beforeRegister() {
+        this.is = 'app-fbtargeting';
+      }
+      created() {}
+      ready() {
+        const ACCESS_TOKEN = 'CAADOBc7c6QsBAAcSlwm92oEnR9G9zkpK4KikpmWdNT7UoCu7Nh3NfK5AkQeuzH17wQNcZAXGE00mJjfHxdHpsnKRnWdvnmQlkShaZBdQdmohuMqR7IwvBgGfSbWN4fYM2AYbNcjBzZBsxBERliUjWrfyjZBCXjaIPrOJzRfSFK7R5ZCQI5xtx5tCcAgyJDUPHvd47Ubs8a7RYeVOcRGd0gTm9WFw8WVXTJ7ZBDFfHkZCz9iap29WiGltyxZBKjHoNMoZD';
+        const ACCOUNT = 'act_05286339623894';
+        let tabs = document.querySelector('#tabs');
+        tabs.select(0);
+
+        let appHeader = document.querySelector('app-header');
+        appHeader.account = ACCOUNT;
+        appHeader.accessToken = ACCESS_TOKEN;
+      }
+      attached() {}
+      detached() {}
+      attributeChanged() {
+      }
+    }
+
+    Polymer(AppFbTargeting);
+  </script>
+
+</dom-module>

@@ -1,5 +1,3 @@
-<!-- <link rel="import" href="../bower_components/polymer/polymer.html"> -->
-
 <dom-module id="app-header">
   <template>
     <style>
@@ -9,6 +7,7 @@
       }
       paper-input { float: left; margin-right: 20px;}
       paper-toolbar {background-color: white; margin-bottom: 20px;}
+      reach-estimate {display:block; margin-left:auto; margin-right:20px; width:100px; border:1px solid red;color:black;}
 
     </style>
     <paper-header-panel class="flex">
@@ -17,6 +16,7 @@
           <paper-input label="Account" value="{{account}}"></paper-input>
           <paper-input label="Access Token" value="{{accessToken}}"></paper-input>
         </div>
+        <reach-estimate access-token={{accessToken}}></reach-estimate>
       </paper-toolbar>
     </paper-header-panel>
   </template>
