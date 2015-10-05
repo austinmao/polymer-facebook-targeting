@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="generator" content="Facebook Audience with Polymer" />
+  <title>Facebook Audience with Polymer</title>
+  <link rel="manifest" href="manifest.json">
+
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="FbA">
+
+  <!-- build:css styles/main.css -->
+  <link rel="stylesheet" href="styles/main.css">
+  <!-- endbuild-->
+
+  <!-- build:js bower_components/webcomponentsjs/webcomponents-lite.min.js -->
+  <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <!-- endbuild -->
+
+  <!-- will be replaced with elements/elements.vulcanized.html -->
+  <link rel="import" href="elements/elements.html">
+  <!-- endreplace-->
+  <style is="custom-style">
+    paper-tabs {--paper-tabs-selection-bar-color: #cbcbcb;}
+    paper-tab {--paper-tab-ink: #f0f0f0;}
+  </style>
+</head>
+
+<body unresolved class="fullbleed layout vertical">
+<span id="browser-sync-binding"></span>
+<template is="dom-bind" id="app">
+
+  <paper-material elevation="1">
+    <app-header></app-header>
+    <paper-tabs selected="{{selected}}">
+      <paper-tab>Locations</paper-tab>
+      <paper-tab>Demographics</paper-tab>
+      <paper-tab>Interests</paper-tab>
+    </paper-tabs>
+
+    <iron-pages selected={{selected}}>
+      <div><add-location></add-location></div>
+      <div>Demographics</div>
+      <div>Interests</div>
+    </iron-pages>
+
+
+  </paper-material>
+
+</template>
+
+<!-- build:js scripts/app.js -->
+<script src="scripts/app.js"></script>
+<!-- endbuild-->
+</body>
+
+</html>

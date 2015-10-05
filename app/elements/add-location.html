@@ -1,0 +1,154 @@
+<dom-module id="add-location">
+  <template>
+    <style>
+      :host { display: block; position: relative; }
+      paper-card { margin:20px; width: 50%;--paper-card-header-text: { font-size: 16px; } }
+      paper-input { width: 70%; float:right;}
+      paper-dropdown-menu { width: 100px; display:flex;float:left;}
+      .location-results {float:left;}
+      .location-results paper-item {cursor: pointer;}
+      paper-item.location-item {border: 1px solid #f7f7f7;}
+      paper-item.location-item paper-icon-button {margin-left:auto;}
+      #search {margin-top:7px;}
+    </style>
+
+    <iron-ajax auto handle-as="json" last-response="{{_ajaxResponse}}" on-error="_handleAjaxError"></iron-ajax>
+
+    <paper-card heading="Locations">
+      <div class="card-content">
+
+      <template is="dom-if" if="{{targetingSpec.geo_locations.length}}">
+        <div>
+          <h4>Included locations</h4>
+          <div class="list" role="list">
+            <template is="dom-repeat" items="{{targetingSpec.geo_locations}}">
+              <paper-item class="location-item">
+                <paper-item-body two-line>
+                  <div>[[item.name]]</div>
+                  <div style="font-size:12px; font-style: italic;" secondary><span>[[item.key]]</span>: <span>[[item.type]]</span>, <span>[[item.country_code]]</span></div>
+                </paper-item-body>
+                <paper-icon-button on-click="_removeLocation" data-item="[[item]]" icon="icons:remove-circle-outline" alt="Remove"></paper-icon-button>
+              </paper-item>
+            </template>
+          </div>
+        </div>
+      </template>
+
+      <template is="dom-if" if="{{targetingSpec.excluded_geo_locations.length}}">
+        <div>
+          <h4>Excluded locations</h4>
+          <div class="list" role="list">
+            <template is="dom-repeat" items="{{targetingSpec.excluded_geo_locations}}">
+              <paper-item class="location-item">
+                <paper-item-body two-line>
+                  <div>[[item.name]]</div>
+                  <div style="font-size:12px; font-style: italic;" secondary><span>[[item.key]]</span>: <span>[[item.type]]</span>, <span>[[item.country_code]]</span></div>
+                </paper-item-body>
+                <paper-icon-button on-click="_removeLocationExcluded" data-item="[[item]]" icon="icons:remove-circle-outline" alt="Remove"></paper-icon-button>
+              </paper-item>
+            </template>
+          </div>
+        </div>
+      </template>
+
+      </div>
+      <div class="card-actions">
+        <paper-dropdown-menu>
+          <paper-menu id="excluded" class="dropdown-content" selected="0">
+            <paper-item>Include</paper-item>
+            <paper-item>Exclude</paper-item>
+          </paper-menu>
+        </paper-dropdown-menu>
+        <paper-input id="search" label="Add a country, state/province, city, ZIP" on-change="_handleInputChange"></paper-input>
+        <paper-menu class="location-results">
+          <template is="dom-repeat" items="{{_ajaxResponse.data}}">
+            <paper-item data-item="[[item]]" on-click="_addLocation">[[item.name]]</paper-item>
+          </template>
+        </paper-menu>
+      </div>
+    </paper-card>
+  </template>
+
+  <script>
+    class AddLocation {
+      beforeRegister() {
+        this.is = 'add-location';
+        this.properties = {
+          accessToken: {
+            type: String,
+            value: '',
+            notify: true,
+            reflectToAttribute: true
+          },
+          account: {
+            type: String,
+            value: '',
+            notify: true,
+            reflectToAttribute: true
+          },
+          targetingSpec: {
+            type: Object,
+            value: () => {
+              return {
+                'geo_locations': [],
+                'excluded_geo_locations': []
+              };
+            },
+            notify: true,
+            reflectToAttribute: true,
+          }
+        };
+      }
+      created() {}
+      ready() {
+        this._ajaxResponse = null;
+      }
+      attached() {}
+      detached() {}
+      attributeChanged() {}
+
+      _handleInputChange() {
+        this._handleAjax();
+      }
+
+      _handleAjax() {
+        let ajax = document.querySelector('iron-ajax');
+        let search = document.querySelector('#search');
+        let params = {
+          'q': search.value,
+          'limit': 10,
+          'type': 'adgeolocation',
+          'access_token': this.accessToken
+        };
+        let url='https://graph.facebook.com/v2.4/search';
+        ajax.params = params;
+        ajax.url = url;
+      }
+      _handleAjaxError(ev,obj) {
+        console.log(obj.request.xhr.response.error.message);
+      }
+
+      _addLocation(ev) {
+        if(document.querySelector('#excluded').selected === 1) {
+          // excluded
+          this.push('targetingSpec.excluded_geo_locations',ev.target.dataItem);
+        } else {
+          this.push('targetingSpec.geo_locations',ev.target.dataItem);
+        }
+
+        this._ajaxResponse = null;
+        document.querySelector('#search').value = '';
+      }
+
+      _removeLocation(ev) {
+        this.splice('targetingSpec.geo_locations',this.targetingSpec.geo_locations.indexOf(ev.target.dataHost.dataItem),1);
+      }
+      _removeLocationExcluded(ev) {
+        this.splice('targetingSpec.excluded_geo_locations',this.targetingSpec.excluded_geo_locations.indexOf(ev.target.dataHost.dataItem),1);
+      }
+    }
+
+    Polymer(AddLocation);
+  </script>
+
+</dom-module>

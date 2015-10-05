@@ -1,0 +1,55 @@
+<!-- <link rel="import" href="../bower_components/polymer/polymer.html"> -->
+
+<dom-module id="app-header">
+  <template>
+    <style>
+      :host {
+        display: block;
+        position: relative;
+      }
+      paper-input { float: left; margin-right: 20px;}
+      paper-toolbar {background-color: white; margin-bottom: 20px;}
+
+    </style>
+    <paper-header-panel class="flex">
+      <paper-toolbar>
+        <div>
+          <paper-input label="Account" value="{{account}}"></paper-input>
+          <paper-input label="Access Token" value="{{accessToken}}"></paper-input>
+        </div>
+      </paper-toolbar>
+    </paper-header-panel>
+  </template>
+
+  <script>
+    class AppHeader {
+      beforeRegister() {
+        this.is = 'app-header';
+        this.properties = {
+          accessToken: {
+            type: String,
+            value: '',
+            notify: true,
+            reflectToAttribute: true
+          },
+          account: {
+            type: String,
+            value: ''
+          }
+        };
+      }
+      created() {}
+      ready() {
+        // console.log(this.accessToken);
+      }
+      attached() {}
+      detached() {}
+      attributeChanged() {
+        // console.log(this.accessToken);
+      }
+    }
+
+    Polymer(AppHeader);
+  </script>
+
+</dom-module>
