@@ -10,7 +10,7 @@
     </style>
 
     <paper-material elevation="1">
-      <app-header access-token={{accessToken}} account={{account}}></app-header>
+      <app-header id="header" access-token={{accessToken}} account={{account}}></app-header>
       <paper-tabs id="tabs" selected="{{selected}}" account={{account}}>
         <paper-tab>Locations</paper-tab>
         <paper-tab>Demographics</paper-tab>
@@ -19,7 +19,7 @@
 
       <iron-pages selected={{selected}}>
         <div>
-          <add-location access-token={{accessToken}}></add-location>
+          <add-location targeting-spec={{targetingSpec}} access-token={{accessToken}}></add-location>
         </div>
         <div>Demographics</div>
         <div>Interests</div>
@@ -32,6 +32,16 @@
     class AppFbTargeting {
       beforeRegister() {
         this.is = 'app-fbtargeting';
+        this.properties = {
+          targetingSpec: {
+            type: Object,
+            notify: true,
+            reflectToAttribute: true,
+          }
+        };
+        this.observers = [
+          '_targetingSpecChanged(targetingSpec.*)'
+        ];
       }
       created() {}
       ready() {
@@ -47,6 +57,14 @@
       attached() {}
       detached() {}
       attributeChanged() {
+      }
+
+      _targetingSpecChanged(targetingSpec) {
+        console.log(targetingSpec)
+        console.log(this.targetingSpec)
+        // generate new targeting spec for reach estimate
+        // console.log(this.$.header);
+        // this.$.header.targetingSpec = this.targetingSpec;
       }
     }
 

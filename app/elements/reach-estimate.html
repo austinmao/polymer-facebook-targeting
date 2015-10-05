@@ -25,6 +25,9 @@
             value: ''
           }
         };
+        this.observers = [
+          '_targetingSpecChanged(targetingSpec.*)'
+        ];
       }
       created() {}
       ready() {
@@ -32,7 +35,8 @@
       attached() {}
       detached() {}
       attributeChanged() {
-        console.log(this.accessToken);
+        // console.log(this.accessToken);
+        // console.log(this.targetingSpec);
       }
     }
 
