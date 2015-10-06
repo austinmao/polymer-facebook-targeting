@@ -7,10 +7,13 @@
       }
       paper-tabs {--paper-tabs-selection-bar-color: #cbcbcb;}
       paper-tab {--paper-tab-ink: #f0f0f0;}
+      reach-estimate {display:block; margin-left:auto; margin-right:20px; width:100px; border:1px solid red;color:black;}
     </style>
 
     <paper-material elevation="1">
-      <app-header id="header" access-token={{accessToken}} account={{account}}></app-header>
+      <app-header id="header" access-token={{accessToken}} account={{account}}>
+        <reach-estimate access-token={{accessToken}}></reach-estimate>
+      </app-header>
       <paper-tabs id="tabs" selected="{{selected}}" account={{account}}>
         <paper-tab>Locations</paper-tab>
         <paper-tab>Demographics</paper-tab>
