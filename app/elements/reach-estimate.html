@@ -25,12 +25,13 @@
             value: ''
           }
         };
-        this.observers = [
-          '_targetingSpecChanged(targetingSpec.*)'
-        ];
+        this.observers = [];
       }
       created() {}
       ready() {
+        this.addEventListener('targeting-spec', function (e) {
+            console.log(e.detail);
+        });
       }
       attached() {}
       detached() {}

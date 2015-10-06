@@ -11,10 +11,10 @@
     </style>
 
     <paper-material elevation="1">
-      <app-header id="header" access-token={{accessToken}} account={{account}}>
-        <reach-estimate access-token={{accessToken}}></reach-estimate>
+      <app-header id="header" access-token={{accessToken}}>
+        <reach-estimate access-token={{accessToken}}  account={{account}}></reach-estimate>
       </app-header>
-      <paper-tabs id="tabs" selected="{{selected}}" account={{account}}>
+      <paper-tabs id="tabs" selected="{{selected}}">
         <paper-tab>Locations</paper-tab>
         <paper-tab>Demographics</paper-tab>
         <paper-tab>Interests</paper-tab>
@@ -54,17 +54,20 @@
         tabs.select(0);
 
         let appHeader = document.querySelector('app-header');
-        appHeader.account = ACCOUNT;
         appHeader.accessToken = ACCESS_TOKEN;
+
+        let reachEstimate = document.querySelector('reach-estimate');
+        reachEstimate.account = ACCOUNT;
+        reachEstimate.accessToken = ACCESS_TOKEN;
       }
       attached() {}
       detached() {}
       attributeChanged() {
       }
 
-      _targetingSpecChanged(targetingSpec) {
-        console.log(targetingSpec)
-        console.log(this.targetingSpec)
+      _targetingSpecChanged() {
+        // console.log(this.targetingSpec)
+        this.fire('targeting-spec',{targetingSpec: this.targetingSpec});
         // generate new targeting spec for reach estimate
         // console.log(this.$.header);
         // this.$.header.targetingSpec = this.targetingSpec;
