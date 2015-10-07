@@ -6,7 +6,13 @@
         position: relative;
       }
     </style>
-    <div>reach estimate</div>
+    <div>
+      Users: <span>{{_ajaxResponse.users}}</span><br/>
+      CPA:<span>{{_ajaxResponse.bid_estimations.0.cpa_median}}</span>&nbsp;&nbsp;
+      CPC:<span>{{_ajaxResponse.bid_estimations.0.cpc_median}}</span>&nbsp;&nbsp;
+      CPM:<span>{{_ajaxResponse.bid_estimations.0.cpm_median}}</span>&nbsp;&nbsp;
+    </div>
+    <iron-ajax auto handle-as="json" last-response="{{_ajaxResponse}}" on-error="_handleAjaxError"></iron-ajax>
   </template>
 
   <script>
@@ -26,7 +32,34 @@
         this.observers = ['_targetingSpecChanged(targetingSpec.*)'];
       }
       _targetingSpecChanged() {
-        console.log('RE:',this.targetingSpec);
+        // console.log('RE:',this.targetingSpec);
+
+        // TBD: transform the targeting spec for reach estimate
+        this.targetingSpecForReachEstimate = {
+          'geo_locations':{
+                'countries': ['US'],
+              },
+          'age_min':20,
+          'age_max':24
+        }
+        // console.log(this.targetingSpecForReachEstimate);
+        this._handleAjax();
+      }
+      _handleAjax() {
+        let ajax = document.querySelector('iron-ajax');
+        let params = {
+          // 'optimize_for': 'NONE',
+          'targeting_spec': JSON.stringify(this.targetingSpecForReachEstimate),
+          'access_token': this.config.access_token
+        };
+        let url=`https://graph.facebook.com/v2.4/${this.config.account}/reachestimate`;
+        if(this.targetingSpec) {
+          ajax.params = params;
+          ajax.url = url;
+        }
+      }
+      _handleAjaxError(ev,obj) {
+        console.log(obj.request.xhr.response.error.message);
       }
     }
 
