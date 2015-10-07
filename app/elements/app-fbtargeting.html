@@ -11,8 +11,8 @@
     </style>
 
     <paper-material elevation="1">
-      <app-header id="header" access-token={{accessToken}}>
-        <reach-estimate access-token={{accessToken}}  account={{account}}></reach-estimate>
+      <app-header id="header" config={{config}}>
+        <reach-estimate config={{config}} targeting-spec={{targetingSpec}}></reach-estimate>
       </app-header>
       <paper-tabs id="tabs" selected="{{selected}}">
         <paper-tab>Locations</paper-tab>
@@ -22,7 +22,7 @@
 
       <iron-pages selected={{selected}}>
         <div>
-          <add-location targeting-spec={{targetingSpec}} access-token={{accessToken}}></add-location>
+          <add-location targeting-spec={{targetingSpec}} config={{config}}></add-location>
         </div>
         <div>Demographics</div>
         <div>Interests</div>
@@ -40,37 +40,21 @@
             type: Object,
             notify: true,
             reflectToAttribute: true,
+          },
+          config: {
+            type: Object
           }
         };
-        this.observers = [
-          '_targetingSpecChanged(targetingSpec.*)'
-        ];
       }
-      created() {}
       ready() {
-        const ACCESS_TOKEN = 'CAADOBc7c6QsBAAcSlwm92oEnR9G9zkpK4KikpmWdNT7UoCu7Nh3NfK5AkQeuzH17wQNcZAXGE00mJjfHxdHpsnKRnWdvnmQlkShaZBdQdmohuMqR7IwvBgGfSbWN4fYM2AYbNcjBzZBsxBERliUjWrfyjZBCXjaIPrOJzRfSFK7R5ZCQI5xtx5tCcAgyJDUPHvd47Ubs8a7RYeVOcRGd0gTm9WFw8WVXTJ7ZBDFfHkZCz9iap29WiGltyxZBKjHoNMoZD';
-        const ACCOUNT = 'act_05286339623894';
+        const CONFIG = {
+          access_token: 'CAADOBc7c6QsBAAcSlwm92oEnR9G9zkpK4KikpmWdNT7UoCu7Nh3NfK5AkQeuzH17wQNcZAXGE00mJjfHxdHpsnKRnWdvnmQlkShaZBdQdmohuMqR7IwvBgGfSbWN4fYM2AYbNcjBzZBsxBERliUjWrfyjZBCXjaIPrOJzRfSFK7R5ZCQI5xtx5tCcAgyJDUPHvd47Ubs8a7RYeVOcRGd0gTm9WFw8WVXTJ7ZBDFfHkZCz9iap29WiGltyxZBKjHoNMoZD',
+          account: 'act_05286339623894'
+        }
         let tabs = document.querySelector('#tabs');
         tabs.select(0);
 
-        let appHeader = document.querySelector('app-header');
-        appHeader.accessToken = ACCESS_TOKEN;
-
-        let reachEstimate = document.querySelector('reach-estimate');
-        reachEstimate.account = ACCOUNT;
-        reachEstimate.accessToken = ACCESS_TOKEN;
-      }
-      attached() {}
-      detached() {}
-      attributeChanged() {
-      }
-
-      _targetingSpecChanged() {
-        // console.log(this.targetingSpec)
-        this.fire('targeting-spec',{targetingSpec: this.targetingSpec});
-        // generate new targeting spec for reach estimate
-        // console.log(this.$.header);
-        // this.$.header.targetingSpec = this.targetingSpec;
+        this.set('config',CONFIG);
       }
     }
 

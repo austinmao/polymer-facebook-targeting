@@ -74,14 +74,8 @@
       beforeRegister() {
         this.is = 'add-location';
         this.properties = {
-          accessToken: {
-            type: String,
-            value: '',
-            notify: true,
-            reflectToAttribute: true
-          },
-          account: {
-            type: String,
+          config: {
+            type: Object,
             value: '',
             notify: true,
             reflectToAttribute: true
@@ -99,13 +93,9 @@
           }
         };
       }
-      created() {}
       ready() {
         this._ajaxResponse = null;
       }
-      attached() {}
-      detached() {}
-      attributeChanged() {}
 
       _handleInputChange() {
         this._handleAjax();
@@ -118,7 +108,7 @@
           'q': search.value,
           'limit': 10,
           'type': 'adgeolocation',
-          'access_token': this.accessToken
+          'access_token': this.config.access_token
         };
         let url='https://graph.facebook.com/v2.4/search';
         ajax.params = params;

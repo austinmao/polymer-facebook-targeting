@@ -11,8 +11,8 @@
     <paper-header-panel class="flex">
       <paper-toolbar>
         <div>
-          <paper-input label="Account" value="{{account}}"></paper-input>
-          <paper-input label="Access Token" value="{{accessToken}}"></paper-input>
+          <paper-input label="Account" value="{{config.account}}"></paper-input>
+          <paper-input label="Access Token" value="{{config.access_token}}"></paper-input>
         </div>
         <content></content>
       </paper-toolbar>
@@ -24,26 +24,12 @@
       beforeRegister() {
         this.is = 'app-header';
         this.properties = {
-          accessToken: {
-            type: String,
-            value: '',
+          config: {
+            type: Object,
             notify: true,
             reflectToAttribute: true
           },
-          account: {
-            type: String,
-            value: ''
-          }
         };
-      }
-      created() {}
-      ready() {
-        // console.log(this.accessToken);
-      }
-      attached() {}
-      detached() {}
-      attributeChanged() {
-        // console.log(this.accessToken);
       }
     }
 

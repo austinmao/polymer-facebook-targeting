@@ -14,30 +14,19 @@
       beforeRegister() {
         this.is = 'reach-estimate';
         this.properties = {
-          accessToken: {
-            type: String,
-            value: '',
-            notify: true,
-            reflectToAttribute: true
+          config: {
+            type: Object
           },
-          account: {
-            type: String,
-            value: ''
+          targetingSpec: {
+            type: Object,
+            reflectToAttribute: true,
+            notify: true
           }
         };
-        this.observers = [];
+        this.observers = ['_targetingSpecChanged(targetingSpec.*)'];
       }
-      created() {}
-      ready() {
-        this.addEventListener('targeting-spec', function (e) {
-            console.log(e.detail);
-        });
-      }
-      attached() {}
-      detached() {}
-      attributeChanged() {
-        // console.log(this.accessToken);
-        // console.log(this.targetingSpec);
+      _targetingSpecChanged() {
+        console.log('RE:',this.targetingSpec);
       }
     }
 
