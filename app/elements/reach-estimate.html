@@ -5,14 +5,16 @@
         display: block;
         position: relative;
       }
+      .error {font-size: 10px; color:red; margin-top: 5px;}
     </style>
     <div>
-      Users: <span>{{_ajaxResponse.users}}</span><br/>
-      CPA:<span>{{_ajaxResponse.bid_estimations.0.cpa_median}}</span>&nbsp;&nbsp;
-      CPC:<span>{{_ajaxResponse.bid_estimations.0.cpc_median}}</span>&nbsp;&nbsp;
-      CPM:<span>{{_ajaxResponse.bid_estimations.0.cpm_median}}</span>&nbsp;&nbsp;
+      Users: <span>{{data.users}}</span><br/>
+      CPA:<span>{{data.cpa_median}}</span>&nbsp;&nbsp;
+      CPC:<span>{{data.cpc_median}}</span>&nbsp;&nbsp;
+      CPM:<span>{{data.cpm_median}}</span>&nbsp;&nbsp;
+      <div class="error">{{error}}</div>
     </div>
-    <!-- <iron-ajax auto handle-as="json" last-response="{{_ajaxResponse}}" on-error="_handleAjaxError"></iron-ajax> -->
+    <iron-ajax id="ajax" auto handle-as="json" last-response="{{_ajaxResponse}}" on-response="_handleAjaxResponse" on-error="_handleAjaxError"></iron-ajax>
   </template>
 
   <script>
@@ -32,40 +34,69 @@
         this.observers = ['_targetingSpecChanged(targetingSpec.*)'];
       }
       _targetingSpecChanged() {
-        // console.log('RE:',this.targetingSpec);
-
-        // if(!this.targetingSpec.add_geolocations) return;
-        //
-        // this.targetingSpec.map( e =>{
-        //   console.log(e);
-        // })
-
-        // TBD: transform the targeting spec for reach estimate
         this.targetingSpecForReachEstimate = {
           'geo_locations':{
-                'countries': ['US'],
+                'countries': [],
+                'cities': [],
+                'regions': [],
+                'zips':[]
               },
-          'age_min':20,
-          'age_max':24
+          'excluded_geo_locations': {
+            'countries': [],
+            'cities': [],
+            'regions': [],
+            'zips':[]
+          }
+        };
+
+        for(let prop in this.targetingSpec) {
+          if(prop === 'geo_locations' || prop === 'excluded_geo_locations') {
+            this.targetingSpec[prop].map( e => {
+              switch (e.type) {
+                case 'city':
+                  this.targetingSpecForReachEstimate[prop].cities.push({'key': e.key}); break;
+                case 'country':
+                  this.targetingSpecForReachEstimate[prop].countries.push(e.key); break;
+                case 'regions':
+                  this.targetingSpecForReachEstimate[prop].regions.push({'key': e.key}); break;
+              }
+            });
+          }
+            // case for others
+            // demographics, interests
         }
-        // console.log(this.targetingSpecForReachEstimate);
+        console.log(this.targetingSpecForReachEstimate);
+        this.error = null;
         this._handleAjax();
       }
       _handleAjax() {
-        let ajax = document.querySelector('iron-ajax');
         let params = {
-          // 'optimize_for': 'NONE',
           'targeting_spec': JSON.stringify(this.targetingSpecForReachEstimate),
           'access_token': this.config.access_token
         };
         let url=`https://graph.facebook.com/v2.4/${this.config.account}/reachestimate`;
         if(this.targetingSpec) {
-          ajax.params = params;
-          ajax.url = url;
+          this.$.ajax.params = params;
+          this.$.ajax.url = url;
         }
       }
+      _handleAjaxResponse(res) {
+        // console.log(res.detail.xhr.response);
+        let data = res.detail.xhr.response;
+        this.data = {
+          users: data.users.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'),
+          cpa_median: data.data.bid_estimations[0].cpa_median / 100,
+          cpc_median: data.data.bid_estimations[0].cpc_median / 100,
+          cpm_median: data.data.bid_estimations[0].cpm_median / 100,
+        };
+      }
       _handleAjaxError(ev,obj) {
-        console.log(obj.request.xhr.response.error.message);
+        console.log(obj.request.xhr.response.error);
+        this.data = {};
+        this.error = obj.request.xhr.response.error.message;
+        if(obj.request.xhr.response.error.message === 'Invalid parameter') {
+          this.error += ': ' + obj.request.xhr.response.error.error_user_title;
+        }
       }
     }
 

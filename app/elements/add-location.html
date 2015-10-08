@@ -12,7 +12,7 @@
       #search {margin-top:7px;}
     </style>
 
-    <iron-ajax auto handle-as="json" last-response="{{_ajaxResponse}}" on-error="_handleAjaxError"></iron-ajax>
+    <iron-ajax id="ajax" auto handle-as="json" last-response="{{_ajaxResponse}}" on-error="_handleAjaxError"></iron-ajax>
 
     <paper-card heading="Locations">
       <div class="card-content">
@@ -78,7 +78,6 @@
             type: Object,
             value: '',
             notify: true,
-            reflectToAttribute: true
           },
           targetingSpec: {
             type: Object,
@@ -89,12 +88,8 @@
               };
             },
             notify: true,
-            reflectToAttribute: true,
           }
         };
-      }
-      ready() {
-        this._ajaxResponse = null;
       }
 
       _handleInputChange() {
@@ -102,7 +97,6 @@
       }
 
       _handleAjax() {
-        let ajax = document.querySelector('iron-ajax');
         let search = document.querySelector('#search');
         let params = {
           'q': search.value,
@@ -111,8 +105,8 @@
           'access_token': this.config.access_token
         };
         let url='https://graph.facebook.com/v2.4/search';
-        ajax.params = params;
-        ajax.url = url;
+        this.$.ajax.params = params;
+        this.$.ajax.url = url;
       }
       _handleAjaxError(ev,obj) {
         console.log(obj.request.xhr.response.error.message);

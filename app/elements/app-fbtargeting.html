@@ -7,7 +7,7 @@
       }
       paper-tabs {--paper-tabs-selection-bar-color: #cbcbcb;}
       paper-tab {--paper-tab-ink: #f0f0f0;}
-      reach-estimate {display:block; margin-left:auto; margin-right:20px; padding:10px; width:200px; border:1px solid grey;color:black; font-size:14px;}
+      reach-estimate {display:block; margin-left:auto; margin-right:20px; padding:10px; width:400px; color:black; font-size:14px;}
     </style>
 
     <paper-material elevation="1">
@@ -22,7 +22,7 @@
 
       <iron-pages selected={{selected}}>
         <div>
-          <add-location targeting-spec={{targetingSpec}} config={{config}}></add-location>
+          <add-location  config={{config}} targeting-spec={{targetingSpec}}></add-location>
         </div>
         <div>Demographics</div>
         <div>Interests</div>
@@ -38,7 +38,6 @@
         this.properties = {
           targetingSpec: {
             type: Object,
-            notify: true,
             reflectToAttribute: true,
           },
           config: {
@@ -50,11 +49,11 @@
         const CONFIG = {
           access_token: 'CAADOBc7c6QsBAAcSlwm92oEnR9G9zkpK4KikpmWdNT7UoCu7Nh3NfK5AkQeuzH17wQNcZAXGE00mJjfHxdHpsnKRnWdvnmQlkShaZBdQdmohuMqR7IwvBgGfSbWN4fYM2AYbNcjBzZBsxBERliUjWrfyjZBCXjaIPrOJzRfSFK7R5ZCQI5xtx5tCcAgyJDUPHvd47Ubs8a7RYeVOcRGd0gTm9WFw8WVXTJ7ZBDFfHkZCz9iap29WiGltyxZBKjHoNMoZD',
           account: 'act_105286339623894'
-        }
+        };
+        this.set('config',CONFIG);
+
         let tabs = document.querySelector('#tabs');
         tabs.select(0);
-
-        this.set('config',CONFIG);
       }
     }
 
