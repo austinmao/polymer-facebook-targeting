@@ -12,7 +12,7 @@
       CPC:<span>{{_ajaxResponse.bid_estimations.0.cpc_median}}</span>&nbsp;&nbsp;
       CPM:<span>{{_ajaxResponse.bid_estimations.0.cpm_median}}</span>&nbsp;&nbsp;
     </div>
-    <iron-ajax auto handle-as="json" last-response="{{_ajaxResponse}}" on-error="_handleAjaxError"></iron-ajax>
+    <!-- <iron-ajax auto handle-as="json" last-response="{{_ajaxResponse}}" on-error="_handleAjaxError"></iron-ajax> -->
   </template>
 
   <script>
@@ -33,6 +33,12 @@
       }
       _targetingSpecChanged() {
         // console.log('RE:',this.targetingSpec);
+
+        // if(!this.targetingSpec.add_geolocations) return;
+        //
+        // this.targetingSpec.map( e =>{
+        //   console.log(e);
+        // })
 
         // TBD: transform the targeting spec for reach estimate
         this.targetingSpecForReachEstimate = {
