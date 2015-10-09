@@ -12,7 +12,7 @@
       #search {margin-top:7px;}
     </style>
 
-    <iron-ajax id="ajax" auto handle-as="json" last-response="{{_ajaxResponse}}" on-error="_handleAjaxError"></iron-ajax>
+    <iron-ajax debounce-duration="300" id="ajax" auto handle-as="json" last-response="{{_ajaxResponse}}" on-error="_handleAjaxError"></iron-ajax>
 
     <paper-card heading="Locations">
       <div class="card-content">
@@ -59,7 +59,7 @@
             <paper-item>Exclude</paper-item>
           </paper-menu>
         </paper-dropdown-menu>
-        <paper-input id="search" label="Add a country, state/province, city, ZIP" on-change="_handleInputChange"></paper-input>
+        <paper-input id="search" label="Add a country, state/province, city, ZIP" on-keyup="_handleInputChange"></paper-input>
         <paper-menu class="location-results">
           <template is="dom-repeat" items="{{_ajaxResponse.data}}">
             <paper-item data-item="[[item]]" on-click="_addLocation">[[item.name]]</paper-item>

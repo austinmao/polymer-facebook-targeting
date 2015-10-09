@@ -1,0 +1,27 @@
+<dom-module id="app-notifications" on-mess="fireMessage">
+  <template>
+    <style>
+      :host {
+        display: block;
+        position: relative;
+      }
+    </style>
+    <paper-toast id="toast" text="{{message}}"></paper-toast>
+  </template>
+
+  <script>
+    class AppNotifications {
+      beforeRegister() {
+        this.is = 'app-notifications';
+      }
+      fireMessage() {
+        console.log('message fired');
+        this.message = e.detail.message;
+        this.$.toast.show();
+      }
+    }
+
+    Polymer(AppNotifications);
+  </script>
+
+</dom-module>
