@@ -60,6 +60,8 @@
                   this.targetingSpecForReachEstimate[prop]['countries'].push(e.key); break;
                 case 'region':
                   this.targetingSpecForReachEstimate[prop]['regions'].push({'key': e.key}); break;
+                case 'zip':
+                  this.targetingSpecForReachEstimate[prop]['zips'].push({'key': e.key}); break;
               }
             });
           }
@@ -75,7 +77,7 @@
           // case for others
           // demographics, interests
         }
-
+        // console.log(this.targetingSpecForReachEstimate);
         if(!Object.keys(this.targetingSpecForReachEstimate.geo_locations).length) {
           this.data = {};
           return;
@@ -97,17 +99,19 @@
       }
       _handleAjaxResponse(res) {
         // console.log(res.detail.xhr.response);
-        let data = res.detail.xhr.response;
-        this.data = {
-          users: data.users.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'),
-          cpa_median: data.data.bid_estimations[0].cpa_median / 100,
-          cpc_median: data.data.bid_estimations[0].cpc_median / 100,
-          cpm_median: data.data.bid_estimations[0].cpm_median / 100,
-        };
+        if(res.detail.xhr.response) {
+          let data = res.detail.xhr.response;
+          this.data = {
+            users: data.users.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'),
+            cpa_median: data.data.bid_estimations[0].cpa_median / 100,
+            cpc_median: data.data.bid_estimations[0].cpc_median / 100,
+            cpm_median: data.data.bid_estimations[0].cpm_median / 100,
+          };
+        }
       }
       _handleAjaxError(ev,obj) {
         // console.log(obj.request.xhr.response.error);
-        this.data = {};
+        // this.data = {users: ''};
         this.error = obj.request.xhr.response.error.message;
         if(obj.request.xhr.response.error.message === 'Invalid parameter') {
           this.error += ': ' + obj.request.xhr.response.error.error_user_title;

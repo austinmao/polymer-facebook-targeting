@@ -5,14 +5,15 @@
       paper-card { margin:20px; width: 50%;--paper-card-header-text: { font-size: 16px; } }
       paper-input { width: 70%; float:right;}
       paper-dropdown-menu { width: 100px; display:flex;float:left;}
-      .location-results {float:left;}
-      .location-results paper-item {cursor: pointer;}
+      paper-menu.location-results {float:left; margin-left: 28px;}
+      paper-menu.location-results paper-item {cursor: pointer;}
       paper-item.location-item {border: 1px solid #f7f7f7;}
       paper-item.location-item paper-icon-button {margin-left:auto;}
+      paper-item.search-item {}
       #search {margin-top:7px;}
     </style>
 
-    <iron-ajax debounce-duration="300" id="ajax" auto handle-as="json" last-response="{{_ajaxResponse}}" on-error="_handleAjaxError"></iron-ajax>
+    <iron-ajax debounce-duration="300" id="ajax" auto handle-as="json" last-response="{{_ajaxResponse}}" on-response="_handleAjaxResponse" on-error="_handleAjaxError"></iron-ajax>
 
     <paper-card heading="Locations">
       <div class="card-content">
@@ -60,9 +61,9 @@
           </paper-menu>
         </paper-dropdown-menu>
         <paper-input id="search" label="Add a country, state/province, city, ZIP" on-keyup="_handleInputChange"></paper-input>
-        <paper-menu class="location-results">
+        <paper-menu class="location-results" role="menu" selected="0">
           <template is="dom-repeat" items="{{_ajaxResponse.data}}">
-            <paper-item data-item="[[item]]" on-click="_addLocation">[[item.name]]</paper-item>
+            <paper-item class="search-item" data-item="[[item]]" on-click="_addLocation"><span>[[item.name]]</span>&nbsp;<span style="font-size:10px;">(<span>[[item.type]]</span>)</span></paper-item>
           </template>
         </paper-menu>
       </div>
@@ -110,6 +111,12 @@
       }
       _handleAjaxError(ev,obj) {
         console.log(obj.request.xhr.response.error.message);
+      }
+      _handleAjaxResponse(ev, obj) {
+        if(ev.detail.xhr.response) {
+          let list = document.querySelector('paper-menu.location-results');
+          list.focus();
+        }
       }
 
       _addLocation(ev) {
