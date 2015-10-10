@@ -3,9 +3,9 @@
     <style>
       :host { display: block; position: relative; }
       paper-card { margin:20px; width: 50%;--paper-card-header-text: { font-size: 16px; } }
-      paper-input { width: 70%; float:right;}
-      paper-dropdown-menu { width: 100px; display:flex;float:left;}
-      paper-menu.location-results {float:left; margin-left: 28px;}
+      paper-input { width: 70%; float:left;}
+      paper-dropdown-menu { width: 100px; display:flex;float:right;}
+      paper-menu.location-results { padding-top: 75px;}
       paper-menu.location-results paper-item {cursor: pointer;}
       paper-item.location-item {border: 1px solid #f7f7f7;}
       paper-item.location-item paper-icon-button {margin-left:auto;}
@@ -54,13 +54,13 @@
 
       </div>
       <div class="card-actions">
+        <paper-input id="search" label="Add a country, state/province, city, ZIP" on-keyup="_handleInputChange"></paper-input>
         <paper-dropdown-menu>
           <paper-menu id="excluded" class="dropdown-content" selected="0">
             <paper-item>Include</paper-item>
             <paper-item>Exclude</paper-item>
           </paper-menu>
         </paper-dropdown-menu>
-        <paper-input id="search" label="Add a country, state/province, city, ZIP" on-keyup="_handleInputChange"></paper-input>
         <paper-menu class="location-results" role="menu" selected="0">
           <template is="dom-repeat" items="{{_ajaxResponse.data}}">
             <paper-item class="search-item" data-item="[[item]]" on-click="_addLocation"><span>[[item.name]]</span>&nbsp;<span style="font-size:10px;">(<span>[[item.type]]</span>)</span></paper-item>
@@ -121,7 +121,6 @@
 
       _addLocation(ev) {
         if(document.querySelector('#excluded').selected === 1) {
-          // excluded
           this.push('targetingSpec.excluded_geo_locations',ev.target.dataItem);
         } else {
           this.push('targetingSpec.geo_locations',ev.target.dataItem);

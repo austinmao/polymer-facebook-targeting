@@ -36,7 +36,7 @@
       }
       _targetingSpecChanged() {
         this.targetingSpecForReachEstimate = {
-          'geo_locations':{
+          'geo_locations': {
                 'countries': [],
                 'cities': [],
                 'regions': [],
@@ -50,35 +50,26 @@
           }
         };
 
+        let added = false;
         for(let prop in this.targetingSpec) {
           if(prop === 'geo_locations' || prop === 'excluded_geo_locations') {
             this.targetingSpec[prop].map( e => {
               switch (e.type) {
                 case 'city':
-                  this.targetingSpecForReachEstimate[prop]['cities'].push({'key': e.key}); break;
+                  this.targetingSpecForReachEstimate[prop]['cities'].push({'key': e.key}); added = true; break;
                 case 'country':
-                  this.targetingSpecForReachEstimate[prop]['countries'].push(e.key); break;
+                  this.targetingSpecForReachEstimate[prop]['countries'].push(e.key); added = true; break;
                 case 'region':
-                  this.targetingSpecForReachEstimate[prop]['regions'].push({'key': e.key}); break;
+                  this.targetingSpecForReachEstimate[prop]['regions'].push({'key': e.key}); added = true; break;
                 case 'zip':
-                  this.targetingSpecForReachEstimate[prop]['zips'].push({'key': e.key}); break;
+                  this.targetingSpecForReachEstimate[prop]['zips'].push({'key': e.key}); added = true; break;
               }
             });
-          }
-          // clean up
-          for(let prop in this.targetingSpecForReachEstimate) {
-            if(prop === 'geo_locations' || prop === 'excluded_geo_locations') {
-              for(let spec in this.targetingSpecForReachEstimate[prop]) {
-                if(this.targetingSpecForReachEstimate[prop][spec].length == 0)
-                  delete this.targetingSpecForReachEstimate[prop][spec];
-              };
-            }
           }
           // case for others
           // demographics, interests
         }
-        // console.log(this.targetingSpecForReachEstimate);
-        if(!Object.keys(this.targetingSpecForReachEstimate.geo_locations).length) {
+        if(!added) {
           this.data = {};
           return;
         }
@@ -98,7 +89,6 @@
         }
       }
       _handleAjaxResponse(res) {
-        // console.log(res.detail.xhr.response);
         if(res.detail.xhr.response) {
           let data = res.detail.xhr.response;
           this.data = {
@@ -110,8 +100,6 @@
         }
       }
       _handleAjaxError(ev,obj) {
-        // console.log(obj.request.xhr.response.error);
-        // this.data = {users: ''};
         this.error = obj.request.xhr.response.error.message;
         if(obj.request.xhr.response.error.message === 'Invalid parameter') {
           this.error += ': ' + obj.request.xhr.response.error.error_user_title;
