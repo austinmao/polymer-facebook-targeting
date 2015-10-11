@@ -42,10 +42,12 @@
           let zips      = [for({type, key} of source) if(type === 'zip') {key: key}];
           return {countries, cities, regions, zips};
         }
-
         this.targetingSpecForReachEstimate = {
           'geo_locations':  specTransform(this.targetingSpec.geo_locations),
-          'excluded_geo_locations': specTransform(this.targetingSpec.excluded_geo_locations)
+          'excluded_geo_locations': specTransform(this.targetingSpec.excluded_geo_locations),
+          'genders': this.targetingSpec.genders,
+          'age_min': this.targetingSpec.age_min,
+          'age_max': this.targetingSpec.age_max
         };
 
         if(JSON.stringify(this.targetingSpecForReachEstimate.geo_locations) === '{"countries":[],"cities":[],"regions":[],"zips":[]}') {

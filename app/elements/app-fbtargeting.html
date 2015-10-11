@@ -25,7 +25,7 @@
           <add-location config={{config}} targeting-spec={{targetingSpec}}></add-location>
         </div>
         <div>
-          <add-demographics></add-demographics>
+          <add-demographics targeting-spec={{targetingSpec}}></add-demographics>
         </div>
         <div>
           <add-interests></add-interests>
@@ -57,7 +57,7 @@
         this.set('config',CONFIG);
 
         let tabs = document.querySelector('#tabs');
-        tabs.select(0);
+        tabs.select(1);
       }
     }
 
