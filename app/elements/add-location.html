@@ -11,9 +11,11 @@
       paper-item.location-item paper-icon-button {margin-left:auto;}
       paper-item.search-item {}
       #search {margin-top:7px;}
+      #toast {background: red; color: white;}
     </style>
 
     <iron-ajax debounce-duration="300" id="ajax" auto handle-as="json" last-response="{{_ajaxResponse}}" on-response="_handleAjaxResponse" on-error="_handleAjaxError"></iron-ajax>
+    <paper-toast id="toast" text="{{error}}" duration="5000"></paper-toast>
 
     <paper-card heading="Locations">
       <div class="card-content">
@@ -104,7 +106,8 @@
         this.$.ajax.url = url;
       }
       _handleAjaxError(ev,obj) {
-        console.log(obj.request.xhr.response.error.message);
+        this.error = obj.request.xhr.response.error.message;
+        this.$.toast.show();
       }
       _handleAjaxResponse(ev) {
         if(ev.detail.xhr.response) {
