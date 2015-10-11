@@ -28,7 +28,7 @@
           <add-demographics targeting-spec={{targetingSpec}}></add-demographics>
         </div>
         <div>
-          <add-interests></add-interests>
+          <add-interests config={{config}} targeting-spec={{targetingSpec}}></add-interests>
         </div>
       </iron-pages>
 
@@ -42,6 +42,7 @@
         this.properties = {
           targetingSpec: {
             type: Object,
+            value: () => { return {}; },
             reflectToAttribute: true,
           },
           config: {
@@ -55,9 +56,7 @@
           account: 'act_105286339623894'
         };
         this.set('config',CONFIG);
-
-        let tabs = document.querySelector('#tabs');
-        tabs.select(1);
+        this.$.tabs.select(0);
       }
     }
 

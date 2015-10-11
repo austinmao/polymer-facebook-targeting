@@ -17,41 +17,39 @@
 
     <paper-card heading="Locations">
       <div class="card-content">
-
-      <template is="dom-if" if="{{targetingSpec.geo_locations.length}}">
-        <div>
-          <h4>Included locations</h4>
-          <div class="list" role="list">
-            <template is="dom-repeat" items="{{targetingSpec.geo_locations}}">
-              <paper-item class="location-item">
-                <paper-item-body two-line>
-                  <div>[[item.name]]</div>
-                  <div style="font-size:12px; font-style: italic;" secondary><span>[[item.key]]</span>: <span>[[item.type]]</span>, <span>[[item.country_code]]</span></div>
-                </paper-item-body>
-                <paper-icon-button on-click="_removeLocation" data-item="[[item]]" icon="icons:remove-circle-outline" alt="Remove"></paper-icon-button>
-              </paper-item>
-            </template>
+        <template is="dom-if" if="{{targetingSpec.geo_locations.length}}">
+          <div>
+            <h4>Included locations</h4>
+            <div class="list" role="list">
+              <template is="dom-repeat" items="{{targetingSpec.geo_locations}}">
+                <paper-item class="location-item">
+                  <paper-item-body two-line>
+                    <div>[[item.name]]</div>
+                    <div style="font-size:12px; font-style: italic;" secondary><span>[[item.key]]</span>: <span>[[item.type]]</span>, <span>[[item.country_code]]</span></div>
+                  </paper-item-body>
+                  <paper-icon-button on-click="_removeLocation" data-item="[[item]]" icon="icons:remove-circle-outline" alt="Remove"></paper-icon-button>
+                </paper-item>
+              </template>
+            </div>
           </div>
-        </div>
-      </template>
+        </template>
 
-      <template is="dom-if" if="{{targetingSpec.excluded_geo_locations.length}}">
-        <div>
-          <h4>Excluded locations</h4>
-          <div class="list" role="list">
-            <template is="dom-repeat" items="{{targetingSpec.excluded_geo_locations}}">
-              <paper-item class="location-item">
-                <paper-item-body two-line>
-                  <div>[[item.name]]</div>
-                  <div style="font-size:12px; font-style: italic;" secondary><span>[[item.key]]</span>: <span>[[item.type]]</span>, <span>[[item.country_code]]</span></div>
-                </paper-item-body>
-                <paper-icon-button on-click="_removeLocationExcluded" data-item="[[item]]" icon="icons:remove-circle-outline" alt="Remove"></paper-icon-button>
-              </paper-item>
-            </template>
+        <template is="dom-if" if="{{targetingSpec.excluded_geo_locations.length}}">
+          <div>
+            <h4>Excluded locations</h4>
+            <div class="list" role="list">
+              <template is="dom-repeat" items="{{targetingSpec.excluded_geo_locations}}">
+                <paper-item class="location-item">
+                  <paper-item-body two-line>
+                    <div>[[item.name]]</div>
+                    <div style="font-size:12px; font-style: italic;" secondary><span>[[item.key]]</span>: <span>[[item.type]]</span>, <span>[[item.country_code]]</span></div>
+                  </paper-item-body>
+                  <paper-icon-button on-click="_removeLocationExcluded" data-item="[[item]]" icon="icons:remove-circle-outline" alt="Remove"></paper-icon-button>
+                </paper-item>
+              </template>
+            </div>
           </div>
-        </div>
-      </template>
-
+        </template>
       </div>
       <div class="card-actions">
         <paper-input id="search" label="Add a country, state/province, city, ZIP" on-keyup="_handleInputChange"></paper-input>
@@ -61,7 +59,7 @@
             <paper-item>Exclude</paper-item>
           </paper-menu>
         </paper-dropdown-menu>
-        <paper-menu class="location-results" role="menu" selected="0">
+        <paper-menu class="location-results" id="results" role="menu" selected="0">
           <template is="dom-repeat" items="{{_ajaxResponse.data}}">
             <paper-item class="search-item" data-item="[[item]]" on-click="_addLocation"><span>[[item.name]]</span>&nbsp;<span style="font-size:10px;">(<span>[[item.type]]</span>)</span></paper-item>
           </template>
@@ -82,25 +80,21 @@
           },
           targetingSpec: {
             type: Object,
-            value: () => {
-              return {
-                'geo_locations': [],
-                'excluded_geo_locations': []
-              };
-            },
             notify: true,
           }
         };
       }
-
+      ready() {
+        this.set('targetingSpec.geo_locations', []);
+        this.set('targetingSpec.excluded_geo_locations', []);
+      }
       _handleInputChange() {
         this._handleAjax();
       }
 
       _handleAjax() {
-        let search = document.querySelector('#search');
         let params = {
-          'q': search.value,
+          'q': this.$.search.value,
           'limit': 10,
           'type': 'adgeolocation',
           'access_token': this.config.access_token
@@ -112,29 +106,28 @@
       _handleAjaxError(ev,obj) {
         console.log(obj.request.xhr.response.error.message);
       }
-      _handleAjaxResponse(ev, obj) {
+      _handleAjaxResponse(ev) {
         if(ev.detail.xhr.response) {
-          let list = document.querySelector('paper-menu.location-results');
-          list.focus();
+          this.$.results.focus();
         }
       }
 
       _addLocation(ev) {
-        if(document.querySelector('#excluded').selected === 1) {
+        if(this.$.excluded.selected === 1) {
           this.push('targetingSpec.excluded_geo_locations',ev.target.dataItem);
         } else {
           this.push('targetingSpec.geo_locations',ev.target.dataItem);
         }
 
         this._ajaxResponse = null;
-        document.querySelector('#search').value = '';
+        this.$.search.value = '';
       }
 
       _removeLocation(ev) {
-        this.splice('targetingSpec.geo_locations',this.targetingSpec.geo_locations.indexOf(ev.target.dataHost.dataItem),1);
+        this.splice('targetingSpec.geo_locations',this.targetingSpec.geo_locations.indexOf(ev.target.dataItem),1);
       }
       _removeLocationExcluded(ev) {
-        this.splice('targetingSpec.excluded_geo_locations',this.targetingSpec.excluded_geo_locations.indexOf(ev.target.dataHost.dataItem),1);
+        this.splice('targetingSpec.excluded_geo_locations',this.targetingSpec.excluded_geo_locations.indexOf(ev.target.dataItem),1);
       }
     }
 

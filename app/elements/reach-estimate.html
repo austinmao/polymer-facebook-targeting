@@ -35,19 +35,23 @@
         this.observers = ['_targetingSpecChanged(targetingSpec.*)'];
       }
       _targetingSpecChanged() {
+        if(Object.keys(this.targetingSpec).length === 0) {
+          return;
+        }
         let specTransform = (source) => {
           let countries = [for({type, key} of source) if(type === 'country') key];
           let cities    = [for({type, key} of source) if(type === 'city') {key: key}];
           let regions   = [for({type, key} of source) if(type === 'region') {key: key}];
           let zips      = [for({type, key} of source) if(type === 'zip') {key: key}];
           return {countries, cities, regions, zips};
-        }
+        };
         this.targetingSpecForReachEstimate = {
           'geo_locations':  specTransform(this.targetingSpec.geo_locations),
           'excluded_geo_locations': specTransform(this.targetingSpec.excluded_geo_locations),
           'genders': this.targetingSpec.genders,
           'age_min': this.targetingSpec.age_min,
-          'age_max': this.targetingSpec.age_max
+          'age_max': this.targetingSpec.age_max,
+          'interests': this.targetingSpec.interests.map((item) => { return {'id':item.id, 'name':item.name}; })
         };
 
         if(JSON.stringify(this.targetingSpecForReachEstimate.geo_locations) === '{"countries":[],"cities":[],"regions":[],"zips":[]}') {
