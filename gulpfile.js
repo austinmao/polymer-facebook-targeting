@@ -77,7 +77,7 @@ gulp.task('js', function () {
   return gulp.src(['app/**/*.{js,html}'])
     .pipe($.sourcemaps.init())
     .pipe($.if('*.html', $.crisper())) // Extract JS from .html files
-    .pipe($.if('*.js', $.babel()))
+    .pipe($.if('*.js', $.babel({stage:0})))
     .pipe($.sourcemaps.write('.'))
     .pipe(gulp.dest('.tmp/'))
     .pipe(gulp.dest('dist/'));

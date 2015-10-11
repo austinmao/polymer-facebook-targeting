@@ -1,0 +1,27 @@
+<dom-module id="add-interests">
+  <template>
+    <style>
+      :host {
+        display: block;
+        position: relative;
+      }
+      paper-card { margin:20px; width: 50%;--paper-card-header-text: { font-size: 16px; } }
+    </style>
+    <paper-card heading="Interests">
+      <div class="card-content">
+
+      </div>
+    </paper-card>
+  </template>
+
+  <script>
+    class AddInterests {
+      beforeRegister() {
+        this.is = 'add-interests';
+      }
+    }
+
+    Polymer(AddInterests);
+  </script>
+
+</dom-module>

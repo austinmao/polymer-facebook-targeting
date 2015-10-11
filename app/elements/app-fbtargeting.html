@@ -22,14 +22,17 @@
 
       <iron-pages selected={{selected}}>
         <div>
-          <add-location  config={{config}} targeting-spec={{targetingSpec}}></add-location>
+          <add-location config={{config}} targeting-spec={{targetingSpec}}></add-location>
         </div>
-        <div>Demographics</div>
-        <div>Interests</div>
+        <div>
+          <add-demographics></add-demographics>
+        </div>
+        <div>
+          <add-interests></add-interests>
+        </div>
       </iron-pages>
 
     </paper-material>
-    <app-notifications></app-notifications>
   </template>
 
   <script>

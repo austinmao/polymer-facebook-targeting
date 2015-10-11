@@ -35,41 +35,20 @@
         this.observers = ['_targetingSpecChanged(targetingSpec.*)'];
       }
       _targetingSpecChanged() {
+        let specTransform = (source) => {
+          let countries = [for({type, key} of source) if(type === 'country') key];
+          let cities    = [for({type, key} of source) if(type === 'city') {key: key}];
+          let regions   = [for({type, key} of source) if(type === 'region') {key: key}];
+          let zips      = [for({type, key} of source) if(type === 'zip') {key: key}];
+          return {countries, cities, regions, zips};
+        }
+
         this.targetingSpecForReachEstimate = {
-          'geo_locations': {
-                'countries': [],
-                'cities': [],
-                'regions': [],
-                'zips':[]
-              },
-          'excluded_geo_locations': {
-            'countries': [],
-            'cities': [],
-            'regions': [],
-            'zips':[]
-          }
+          'geo_locations':  specTransform(this.targetingSpec.geo_locations),
+          'excluded_geo_locations': specTransform(this.targetingSpec.excluded_geo_locations)
         };
 
-        let added = false;
-        for(let prop in this.targetingSpec) {
-          if(prop === 'geo_locations' || prop === 'excluded_geo_locations') {
-            this.targetingSpec[prop].map( e => {
-              switch (e.type) {
-                case 'city':
-                  this.targetingSpecForReachEstimate[prop]['cities'].push({'key': e.key}); added = true; break;
-                case 'country':
-                  this.targetingSpecForReachEstimate[prop]['countries'].push(e.key); added = true; break;
-                case 'region':
-                  this.targetingSpecForReachEstimate[prop]['regions'].push({'key': e.key}); added = true; break;
-                case 'zip':
-                  this.targetingSpecForReachEstimate[prop]['zips'].push({'key': e.key}); added = true; break;
-              }
-            });
-          }
-          // case for others
-          // demographics, interests
-        }
-        if(!added) {
+        if(JSON.stringify(this.targetingSpecForReachEstimate.geo_locations) === '{"countries":[],"cities":[],"regions":[],"zips":[]}') {
           this.data = {};
           return;
         }
