@@ -1,0 +1,23 @@
+<html><head></head><body><dom-module id="app-header">
+  <template>
+    <style>
+      :host {
+        display: block;
+        position: relative;
+      }
+      paper-input { float: left; margin-right: 20px;}
+      paper-toolbar {background-color: white; margin-bottom: 20px;}
+    </style>
+    <paper-header-panel class="flex">
+      <paper-toolbar>
+        <div>
+          <paper-input label="Account" value="{{config.account}}"></paper-input>
+          <paper-input label="Access Token" value="{{config.access_token}}"></paper-input>
+        </div>
+        <content></content>
+      </paper-toolbar>
+    </paper-header-panel>
+  </template>
+
+  </dom-module>
+<script src="app-header.js"></script></body></html>

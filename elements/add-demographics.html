@@ -1,0 +1,43 @@
+<html><head></head><body><dom-module id="add-demographics">
+  <template>
+    <style>
+      :host {
+        display: block;
+        position: relative;
+      }
+      paper-dropdown-menu { width: 60px;}
+      paper-dropdown-menu.genders { width: 100px;}
+      paper-card { margin:20px; width: 50%;--paper-card-header-text: { font-size: 16px; } }
+    </style>
+    <paper-card heading="Demographics">
+      <div class="card-content">
+          <span>Genders</span><span></span>
+          <paper-dropdown-menu class="genders">
+            <paper-menu id="genders" class="dropdown-content" selected="0">
+              <template is="dom-repeat" items="{{genders}}">
+                <paper-item on-click="_handleGendersChange">[[item]]</paper-item>
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu>
+          <span>Age</span>
+          <paper-dropdown-menu>
+            <paper-menu id="age_min" class="dropdown-content" selected="0">
+              <template is="dom-repeat" items="{{age_min}}">
+                <paper-item on-click="_handleAgeChange">[[item]]</paper-item>
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu>
+          <span>-</span>
+          <paper-dropdown-menu>
+            <paper-menu id="age_max" class="dropdown-content" selected="52">
+              <template is="dom-repeat" items="{{age_max}}">
+                <paper-item on-click="_handleAgeChange">[[item]]</paper-item>
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu>
+      </div>
+    </paper-card>
+  </template>
+
+  </dom-module>
+<script src="add-demographics.js"></script></body></html>

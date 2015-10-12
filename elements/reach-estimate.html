@@ -1,0 +1,22 @@
+<html><head></head><body><dom-module id="reach-estimate">
+  <template>
+    <style>
+      :host {
+        display: block;
+        position: relative;
+      }
+      .error {font-size: 10px; color:red; margin-top: 5px;}
+      #toast {background: red; color: white;}
+    </style>
+    <div>
+      Users: <span>{{data.users}}</span>&nbsp;&nbsp;
+      CPA:<span>{{data.cpa_median}}</span>&nbsp;&nbsp;
+      CPC:<span>{{data.cpc_median}}</span>&nbsp;&nbsp;
+      CPM:<span>{{data.cpm_median}}</span>&nbsp;&nbsp;
+    </div>
+    <iron-ajax id="ajax" auto="" handle-as="json" last-response="{{_ajaxResponse}}" on-response="_handleAjaxResponse" on-error="_handleAjaxError"></iron-ajax>
+    <paper-toast id="toast" text="{{error}}" duration="5000"></paper-toast>
+  </template>
+
+  </dom-module>
+<script src="reach-estimate.js"></script></body></html>

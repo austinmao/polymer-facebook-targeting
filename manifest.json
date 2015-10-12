@@ -1,0 +1,6 @@
+{
+  "name": "Facebook Targeting made with Polymer",
+  "short_name": "Facebook Targeting",
+  "start_url": "/#!/",
+  "display": "standalone"
+}

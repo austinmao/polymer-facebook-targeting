@@ -1,0 +1,39 @@
+<html><head></head><body><dom-module id="app-fbtargeting">
+  <template>
+    <style>
+      :host {
+        display: block;
+        position: relative;
+      }
+      paper-tabs {--paper-tabs-selection-bar-color: #cbcbcb;}
+      paper-tab {--paper-tab-ink: #f0f0f0;}
+      reach-estimate {display:block; margin-left:auto; margin-right:20px; padding:10px; width:400px; color:black; font-size:14px;}
+    </style>
+
+    <paper-material elevation="1">
+      <app-header id="header" config="{{config}}">
+        <reach-estimate config="{{config}}" targeting-spec="{{targetingSpec}}"></reach-estimate>
+      </app-header>
+      <paper-tabs id="tabs" selected="{{selected}}">
+        <paper-tab>Locations</paper-tab>
+        <paper-tab>Demographics</paper-tab>
+        <paper-tab>Interests</paper-tab>
+      </paper-tabs>
+
+      <iron-pages selected="{{selected}}">
+        <div>
+          <add-location config="{{config}}" targeting-spec="{{targetingSpec}}"></add-location>
+        </div>
+        <div>
+          <add-demographics targeting-spec="{{targetingSpec}}"></add-demographics>
+        </div>
+        <div>
+          <add-interests config="{{config}}" targeting-spec="{{targetingSpec}}"></add-interests>
+        </div>
+      </iron-pages>
+
+    </paper-material>
+  </template>
+
+  </dom-module>
+<script src="app-fbtargeting.js"></script></body></html>

@@ -1,0 +1,74 @@
+<html><head></head><body><dom-module id="add-location">
+  <template>
+    <style>
+      :host { display: block; position: relative; }
+      paper-card { margin:20px; width: 50%;--paper-card-header-text: { font-size: 16px; } }
+      paper-input { width: 70%; float:left;}
+      paper-dropdown-menu { width: 100px; display:flex;float:right;}
+      paper-menu.location-results { padding-top: 75px;}
+      paper-menu.location-results paper-item {cursor: pointer;}
+      paper-item.location-item {border: 1px solid #f7f7f7;}
+      paper-item.location-item paper-icon-button {margin-left:auto;}
+      paper-item.search-item {}
+      #search {margin-top:7px;}
+      #toast {background: red; color: white;}
+    </style>
+
+    <iron-ajax debounce-duration="300" id="ajax" auto="" handle-as="json" last-response="{{_ajaxResponse}}" on-response="_handleAjaxResponse" on-error="_handleAjaxError"></iron-ajax>
+    <paper-toast id="toast" text="{{error}}" duration="5000"></paper-toast>
+
+    <paper-card heading="Locations">
+      <div class="card-content">
+        <template is="dom-if" if="{{targetingSpec.geo_locations.length}}">
+          <div>
+            <h4>Included locations</h4>
+            <div class="list" role="list">
+              <template is="dom-repeat" items="{{targetingSpec.geo_locations}}">
+                <paper-item class="location-item">
+                  <paper-item-body two-line="">
+                    <div>[[item.name]]</div>
+                    <div style="font-size:12px; font-style: italic;" secondary=""><span>[[item.key]]</span>: <span>[[item.type]]</span>, <span>[[item.country_code]]</span></div>
+                  </paper-item-body>
+                  <paper-icon-button on-click="_removeLocation" data-item="[[item]]" icon="icons:remove-circle-outline" alt="Remove"></paper-icon-button>
+                </paper-item>
+              </template>
+            </div>
+          </div>
+        </template>
+
+        <template is="dom-if" if="{{targetingSpec.excluded_geo_locations.length}}">
+          <div>
+            <h4>Excluded locations</h4>
+            <div class="list" role="list">
+              <template is="dom-repeat" items="{{targetingSpec.excluded_geo_locations}}">
+                <paper-item class="location-item">
+                  <paper-item-body two-line="">
+                    <div>[[item.name]]</div>
+                    <div style="font-size:12px; font-style: italic;" secondary=""><span>[[item.key]]</span>: <span>[[item.type]]</span>, <span>[[item.country_code]]</span></div>
+                  </paper-item-body>
+                  <paper-icon-button on-click="_removeLocationExcluded" data-item="[[item]]" icon="icons:remove-circle-outline" alt="Remove"></paper-icon-button>
+                </paper-item>
+              </template>
+            </div>
+          </div>
+        </template>
+      </div>
+      <div class="card-actions">
+        <paper-input id="search" label="Add a country, state/province, city, ZIP" on-keyup="_handleInputChange"></paper-input>
+        <paper-dropdown-menu>
+          <paper-menu id="excluded" class="dropdown-content" selected="0">
+            <paper-item>Include</paper-item>
+            <paper-item>Exclude</paper-item>
+          </paper-menu>
+        </paper-dropdown-menu>
+        <paper-menu class="location-results" id="results" role="menu" selected="0">
+          <template is="dom-repeat" items="{{_ajaxResponse.data}}">
+            <paper-item class="search-item" data-item="[[item]]" on-click="_addLocation"><span>[[item.name]]</span>&nbsp;<span style="font-size:10px;">(<span>[[item.type]]</span>)</span></paper-item>
+          </template>
+        </paper-menu>
+      </div>
+    </paper-card>
+  </template>
+
+  </dom-module>
+<script src="add-location.js"></script></body></html>
