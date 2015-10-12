@@ -67,7 +67,7 @@
           'targeting_spec': JSON.stringify(this.targetingSpecForReachEstimate),
           'access_token': this.config.access_token
         };
-        let url=`https://graph.facebook.com/v2.4/${this.config.account}/reachestimate`;
+        let url=`https://graph.facebook.com/v2.4/act_${this.config.account}/reachestimate`;
         if(this.targetingSpec) {
           this.$.ajax.params = params;
           this.$.ajax.url = url;
